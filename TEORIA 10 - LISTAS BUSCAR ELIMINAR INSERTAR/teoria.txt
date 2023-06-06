@@ -1,0 +1,141 @@
+Realizar un programa que lea números que representan edades de personas hasta leer la edad -1. 
+Finalizada la lectura se quiere informar cual fue la edad máxima leída.
+
+
+Necesito una estructura que pueda ir agregando datos y 
+por lo tanto su tamaño pueda ir variando en la ejecución del 
+programa (estructura dinámica)
+
+Es una colección de nodos. Cada nodo contiene un elemento 
+(valor que se quiere almacenar en la lista) y una dirección de memoria 
+dinámica que indica donde se  encuentra el siguiente nodo de la lista.  
+
+Toda lista tiene un nodo inicial.
+
+En memoria estática se declara una variable tipo PUNTERO 
+(ya que son las única que pueden almacenar direcciones). 
+La dirección almacenada en esa variable representa la dirección donde comienza la lista. 
+Inicialmente ese puntero no contiene ninguna dirección.
+Luego a medida que se quiere agregar elementos a la lista (nodo), 
+se reserva una dirección de memoria dinámica y  
+se carga el valor que se quiere guardar.
+El último nodo de la lista indica que la dirección que le 
+sigue es nil.
+
+Cada vez que se necesite agregar un nodo se deberá reservar 
+memoria dinámica (new) y cuando se quiera eliminar un nodo se debe 
+liberar la memoria dinámica (dispose) .
+
+<---------------------------------------->
+Program uno;
+
+Type 
+  nombreTipo= ^nombreNodo;
+     
+  nombreNodo = record
+       elemento: tipoElemento;
+       punteroSig: nombreTipo;
+  end;
+
+
+Var 
+  Pri: nombreTipo; 
+<---------------------------------------->
+LISTA DE ENTEROS
+--> Program uno;
+
+Type 
+  listaE= ^nodo;
+     
+  nodo = record
+       elemento: integer;
+       punteroSig: listaE;
+  end;
+
+
+Var 
+  Pri: listaE; 
+
+Crear una lista quiere decir que la lista no tiene ningun elemento cargado, es decir no ocupa memoria
+Al hacer new, se le asiga espacio en la memoria dinamica y por lo tanto significaria que posee algun valor
+
+<---------------------------------------->
+PROCEDIMIENTO PARA EL CREAR UNA LISTA
+
+Program uno;
+
+Type listaE= ^datosEnteros;
+     
+      datosEnteros= record
+                     elem:integer;
+                     sig:listaE;
+                    end;
+Procedure crear (var p: listaE);
+begin
+  p:= nil;
+end;
+
+Var 
+  pri: listaE; 
+
+Begin
+  crear (pri);
+End.
+<---------------------------------------->
+RECORRER UNA LISTA
+Implica posicionarse al comienzo de la lista y a partir de allí ir 
+“pasando” por cada elemento de la misma hasta llegar al final.
+
+Inicializo una variable auxiliar con la dirección del puntero inicial de la lista
+
+mientras (no sea el final de la lista)
+   proceso el elemento (ej: imprimo, sumo, modifico)
+   avanzo al siguiente elemento de auxiliar
+
+<---------------------------------------->
+procedure recorrerLista (pI: listaE);
+Var
+ aux:listaE; 
+
+begin
+  aux:= pI;
+  while (aux^.sig <> nil) do
+   begin
+      write (aux^.elem);
+      aux:= aux^.sig;
+   end;
+end;
+
+Si la lista ingresa VACIA a este procedimiento esto no funciona, ya que el puntero de aux^.sig no existe
+en la memoria dinamica
+Y tampoco funciona si la lista posee UN solo elemento
+Y si la lista tiene muchos elementos no imprime el último
+<---------------------------------------->
+FORMA CORRECTA DE ESCRIBIR EL proceso
+procedure recorrerLista (pI: listaE);
+Var
+ aux:listaE; 
+
+begin
+  aux:= pI;
+  while (aux <> nil) do
+   begin
+      write (aux^.elem);
+      aux:= aux^.sig;
+   end;
+end;
+
+En vez de mirar el aux del siguiente, me paro en el actual y veo si es NIL o no
+<---------------------------------------->
+ALTERNATIVA SIN USAR EL aux
+procedure recorrerLista (pI: listaE);
+
+begin
+ while (pI <> nil) do
+   begin
+      write (pI^.elem);
+      pI:= pI^.sig;
+   end;
+end;
+<---------------------------------------->
+
