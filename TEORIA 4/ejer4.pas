@@ -1,7 +1,7 @@
-Program Ejercicio4;
+Program ejer4;
 Type 
-  rango = 1..100;	
-  vecNum = array [rango] of integer;
+    rango = 1..100;	
+    vecNum = array [rango] of integer;
 {Punto A, dado un num X y el vector de numeros, 
 retornar la posicion del num X en dicho vector o el valor -1 si no se encuentra}
 procedure posicion (v: vecNum; x:integer;var pos:integer);
@@ -12,10 +12,12 @@ begin
     posi:= 1;
     stop:= false;
     while (stop = false) do
-        if (v[pos] <> X) then
+        if (v[pos] <> X) then begin
             posi:= pos + 1;
-        else;
+        end;
+        if (v[pos] = X) then begin
             stop:= true;
+        end;
 end;
 
 {b)recibe dos valores x e y (entre 1 y 100) y el vector de números, y retorna el mismo vector
@@ -41,8 +43,9 @@ var
     suma,i: integer;
 begin
     suma:=0;
-    for i:=1 to 100 do
+    for i:=1 to 100 do begin
         suma:= suma + v[i]
+    end;
     sumaVector:= suma;
 end;
 {d) promedio: devuelve el valor promedio de los elementos del vector}
@@ -91,7 +94,7 @@ var
     v:vecNum;
     stop:boolean;
     i:integer;
-    x:= real;
+    x: real;
 begin
 end.
 
