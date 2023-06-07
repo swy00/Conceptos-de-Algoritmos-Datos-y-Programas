@@ -1,0 +1,19 @@
+Procedure ImprimirVector ( var vec: vector;  dimL: dim );
+var
+   i: dim;
+begin
+     for i:= 1 to dimL do
+         write ('-----');
+     writeln;
+     write (' ');
+     for i:= 1 to dimL do begin
+        if(vec[i] < 9)then
+            write ('0');
+        write(vec[i], ' | ');
+     end;
+     writeln;
+     for i:= 1 to dimL do
+         write ('-----');
+     writeln;
+     writeln;
+End;

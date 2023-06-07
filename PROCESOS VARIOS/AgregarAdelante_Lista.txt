@@ -1,0 +1,9 @@
+procedure agregar_adelante(var l:lista; num:integer);
+var
+	nue:lista;
+begin
+	new(nue);
+	nue^.dato:=num;
+	nue^.sig:=l;
+	l:=nue;
+end;

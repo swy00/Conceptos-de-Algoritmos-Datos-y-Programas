@@ -1,0 +1,14 @@
+procedure crearVector4Listas (var v: vector);
+var
+   i, j, num: integer;
+begin
+     for j:= 1 to 4 do
+         v[j]:= NIL;
+     for i:= 1 to 4 do begin
+         num:= random (10);
+         while (num <> 0)do begin
+               insertar_ordenado (v[i], num);
+               num := random(10);
+         end;
+     end;
+end;

@@ -1,0 +1,19 @@
+procedure recorrido_Acotado(a:arbol; valorInf, valorSup:integer);	//inciso B
+var
+   suma:integer;
+begin
+	if (a <> nil) then begin
+		if (a^.cantA >= valorInf) then
+			if (a^.cantA <= valorSup) then begin
+				Recorrido_Acotado(a^.HI, valorInf, valorSup);
+				suma:= 0;
+				proceso_suma(a^.listaA, suma);
+				writeln('Cantidad de asistencias: ',a^.cantA, '-');
+				writeln('Cantidad de alumnos con esas asistencias: ',suma);
+				Recorrido_Acotado(a^.HD, valorInf, valorSup);
+			end else
+				Recorrido_Acotado(a^.HI, valorInf, valorSup)
+		else
+			Recorrido_Acotado(a^.HD, valorInf, valorSup);
+	end;
+end;

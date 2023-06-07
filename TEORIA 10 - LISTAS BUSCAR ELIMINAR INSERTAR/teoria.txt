@@ -139,3 +139,159 @@ begin
 end;
 <---------------------------------------->
 
+AGREGAR ADELANTE
+
+Implica generar un nuevo nodo y agregarlo como primer elemento de la lista. 
+
+Para agregar siempre tengo que pedir un espacio de memoria dinamica
+
+Implica generar un nuevo nodo y agregarlo como primer elemento de la lista. 
+
+PASOS ---->
+Reservo espacio en memoria nuevo elemento.
+
+si (es el primer elemento a agregar)
+  asigno al puntero inicial la dirección del nuevo elemento.
+
+sino
+  indico que el siguiente de nuevo elemento es el puntero inicial.
+  actualizo el puntero inicial de la lista con la dirección del nuevo
+  elemento.
+
+Program uno;
+
+Type listaE= ^datosEnteros;
+     
+     datosEnteros= record
+                    elem:integer;
+                    sig:listaE;
+                   end;
+Var 
+  pri: listaE;
+  num:integer;  {lo que se va a cargar}
+
+Begin
+  crear (pri); {pri va a pasar a valer nil }
+  read (num);
+  agregarAdelante (pri,num); {va a designarle una pos en memoria, y se le va a asigar el valor de num y el que le sigue será nil }
+  read (num);
+  agregarAdelante (pri,num); 
+<---------------------------------------->
+AGREGAR ADELANTE PROCESO
+{pi es el puntero inicial de la list, y num el valor que quiero agregar}
+procedure agregarAdelante (var pI:listaE; num:integer);
+Var
+ nuevo:listaE;
+ 
+Begin
+   new (nuevo);          {pido el nuevo espacio en memoria para el valor a agregar} 
+   nuevo^.elem:= num;    {le cargo el valor a agregar} 
+   nuevo^.sig:=nil;      {le cargo al puntero siguiente el valor nil}
+   if (pI = nil) then    {Checkeo si la lista está vacia}
+    pI:= nuevo           {en ese caso, el primer puntero le asigno el valor y al sig nil}
+   else begin
+        nuevo^.sig:= pI; {En caso de no estar vacia a mi nuevo nodo lo hago ser el pI, y el sig que era nil, será el pI original}
+        pI:=nuevo;
+       end;
+End;
+
+<---------------------------------------->
+AGREGAR AL FINAL
+
+Implica generar un nuevo nodo y agregarlo como último elemento de la lista. 
+
+Pasos --->
+Reservo espacio en memoria nuevo elemento.
+
+si (es el primer elemento a agregar)
+  asigno al puntero inicial la dirección del nuevo elemento.
+
+sino
+  inicializo un puntero auxiliar aux
+  mientras (no llegue al último elemento)
+   avanzo en la lista.
+  actualizo como siguiente del último nodo al nuevo elemento
+<---------------------------------------->
+Program uno;
+
+Type listaE= ^datosEnteros;
+     
+     datosEnteros= record
+                    elem:integer;
+                    sig:listaE;
+                   end;
+Var 
+  pri: listaE;
+  num:integer;  
+Begin
+  crear (pri);
+  read (num);
+  agregarAlFinal (pri,num); 
+  read (num);
+  agregarAlFinal (pri,num); 
+<---------------------------------------->
+AGREGAR AL FINAL proceso
+
+procedure agregarAlFinal (var pI:listaE; num:integer);
+Var
+ nuevo,aux:listaE;  {la variable AUX me va a permitir recorrer la lista y encontrar el ultimo}
+ 
+Begin
+   new (nuevo);       {creo un nuevo espacio, le asigno el valor y al sig nil}
+   nuevo^.elem:= num; 
+   nuevo^.sig:=nil; 
+    if (pI = nil) then {verifico si la lista es vacia}
+      pI:= nuevo
+    else begin          {Si no es VACIA}
+      aux:= pI;         {comienzo en pI}
+      while (aux ^.sig <> nil) do {mientras el sig <> nil, significa que mi lista sigue}
+        aux:= aux^.sig;
+      {al salir de este while, AUX queda parado en el último nodo}
+      aux^.sig:=nuevo;    {aux al ser el ultimo, le asigno mi nuevo ULTIMO, el cual será [aux,nil]-->[num,nil]}   
+      end;
+End;
+<---------------------------------------->
+OPCION 2, en casos de listas muy grandes, el anterior AUX debe recorrerla toda
+
+{voy a tener un puntero ULT, que cada vez que agrego un elemento se queda con esa direccion}
+{por lo tanto al querer agregar un nuevo valor, solo tengo que asigarle el valor al ult^.sig:=nuevo}
+{y luego obviamente pasar que ULT guarde esta nueva direccion}
+
+Program uno;
+
+Type listaE= ^datosEnteros;
+     
+     datosEnteros= record
+                    elem:integer;
+                    sig:listaE;
+                   end;
+Var 
+  pri,ult: listaE;
+  num:integer;  
+
+Begin
+  crear (pri,ult);
+  read (num);
+  agregarAlFinal2 (pri,ult,num); 
+  read (num);
+  agregarAlFinal2 (pri,,ult,num); 
+<---------------------------------------->
+AREGAR AL FINAL 2 proceso
+procedure agregarAlFinal2 (var pI,pU:listaE; num:integer);
+Var
+ nuevo:listaE;
+ 
+Begin
+   new (nuevo); 
+   nuevo^.elem:= num; 
+   nuevo^.sig:=nil; 
+    if (pI = nil) then begin
+          pI:= nuevo;
+          pU:= nuevo;
+      end
+      else begin
+            pU^.sig:=nuevo;
+            pU:= nuevo;       
+          end;
+End;
+

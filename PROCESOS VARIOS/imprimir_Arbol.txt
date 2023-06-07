@@ -1,0 +1,11 @@
+procedure imprimir_Arbol(a:arbol);
+begin
+	if(a<>nil)then begin
+		imprimir_Arbol(a^.HI);
+		write('Cantidad de asistencias: ' ,a^.cantA, ' ');
+		writeln();
+		writeln('Informacion del alumno: ');
+		imprimir_Lista(a^.listaA);
+		imprimir_Arbol(a^.HD);
+	end;
+end;

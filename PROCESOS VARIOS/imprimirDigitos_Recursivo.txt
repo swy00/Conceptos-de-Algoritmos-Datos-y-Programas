@@ -1,0 +1,25 @@
+procedure imprimirDigitos1 (num: integer);
+var
+   aux: integer;
+begin
+       aux:= num;
+       if ( num <> 0) then begin
+             aux:= num MOD 10;
+             num:= num DIV 10;
+             imprimirDigitos1 (num);
+             writeln (aux);
+       end;
+end;
+
+procedure imprimirDigitos2 (num: integer);
+var
+   aux: integer;
+begin
+       aux:= num;
+       if ( num <> 0) then begin
+             aux:= num MOD 10;
+             num:= num DIV 10;
+             writeln (aux);
+             imprimirDigitos2 (num);
+       end;
+end;

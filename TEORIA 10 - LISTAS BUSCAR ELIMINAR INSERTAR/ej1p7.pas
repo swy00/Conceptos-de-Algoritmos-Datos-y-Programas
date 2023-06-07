@@ -9,6 +9,7 @@ b. Informar los dos códigos de género más elegidos.
 c. Realizar un módulo que reciba un DNI, lo busque y lo elimine de la estructura. El DNI puede no
 existir. Invocar dicho módulo en el programa principal.}
 {2.58}
+
 program ej1p7;
 const
     dimF5 = 5;

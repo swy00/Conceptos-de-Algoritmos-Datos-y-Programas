@@ -1,0 +1,10 @@
+procedure crear_Arbol(var a:arbol);
+var
+   r:alumno;
+begin
+	Leer_alumno(r);
+	while (r.cantA <> -1) do begin
+		insertar_arbol(a, r);
+		Leer_alumno(r);
+	end;
+end;

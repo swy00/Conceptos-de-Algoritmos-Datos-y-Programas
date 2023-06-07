@@ -1,0 +1,13 @@
+procedure agregar_atras (var l, ult: lista; num: integer);
+var
+	nue: lista;
+begin
+	new (nue);
+	nue^.dato:= num;
+	nue^.sig:= nil;
+	if (l<> nil) then
+		ult^.sig:= nue
+	else
+		l:= nue;
+	ult:= nue;
+end;

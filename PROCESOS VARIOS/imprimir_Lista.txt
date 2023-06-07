@@ -1,0 +1,13 @@
+procedure imprimir_Lista(l:listaA);
+begin
+	while (l<>nil) do begin
+		writeln('Numero de alumno: ',l^.dato.numA);
+		writeln();
+		writeln('Apellido y Nombre: ',l^.dato.ape_nom);
+		writeln();
+		writeln('Dni: ',l^.dato.dni);
+		writeln();
+		writeln('Nota final: ',l^.dato.notaF);
+		l:=l^.sig;
+	end;
+end;

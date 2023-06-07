@@ -1,0 +1,24 @@
+procedure insertar_arbol (var a:Arbol; r:alumno);
+var
+   nue:arbol;
+begin
+	if(a = nil)then begin
+		new(nue);
+		nue^.cantA:=r.cantA;
+		nue^.listaA:=nil;
+		nue^.HI:=nil;
+		nue^.HD:=nil;
+		a:=nue;
+		insertar_ordenado(nue^.listaA, r);
+	end 
+	else begin
+		if (a^.cantA > r.cantA) then
+			insertar_arbol(a^.HI, r)
+		else begin
+			if (a^.cantA < r.cantA) then
+				insertar_arbol(a^.HD, r)
+			else
+				insertar_ordenado(a^.listaA, r);
+		end;
+	end;
+end;

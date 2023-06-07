@@ -1,0 +1,31 @@
+procedure buscar_minimo (var v:vector; var min: integer);
+var
+   i,aux: integer;
+begin
+     aux:= 0;
+     min:= nummin;
+     for i:= 1 to DimF do
+         if ( v[i] <> nil) then
+            if (v[i]^.dato.isbn < min) then begin
+               min:= v[i]^.dato.isbn;
+               aux:= i;
+            end;
+     if (min <> nummin) then
+        v[aux]:= v[aux]^.sig;
+end;
+
+procedure determinarMinimo(var v: vector; var apeMin: string; var e: empleado);
+var
+   i, lmin: integer;
+begin
+     apeMin:= 'zzz';
+     for i:= 1 to 4 do
+         if (v[i] <> NIL) then
+            if (v[i]^.dato.apellido < apeMin) then    begin
+               apeMin:=  v[i]^.dato.apellido;
+               e:= v[i]^.dato;
+               lmin:= i;
+            end;
+     if (apeMin <> 'zzz') then
+        v[lmin]:= v[lmin]^.sig;
+end;

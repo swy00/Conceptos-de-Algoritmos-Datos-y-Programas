@@ -1,0 +1,15 @@
+procedure Buscar_Arbol (a:arbol; cantA:integer);	//inciso C
+begin
+	if (a = nil) then
+		writeln('El valor no se encuentra en el arbol')
+	else begin
+		if(a^.cantA = cantA)then
+			imprimir_Lista(a^.listaA)
+		else begin
+			if (a^.cantA > cantA) then
+				Buscar_Arbol(a^.HI,cantA)
+			else
+				Buscar_Arbol (a^.HD,cantA);
+		end;
+	end;
+end;

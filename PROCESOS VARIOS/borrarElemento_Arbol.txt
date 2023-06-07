@@ -1,0 +1,32 @@
+procedure borrarElemento (var a: arbol; n: integer; var ok: boolean);
+var
+	aux: arbol;
+begin
+	if (a = nil) then
+		ok:= false
+	else begin
+		if (a^.dato > n) then
+			borrarElemento (a^.hi, n, ok)
+		else
+			if (a^.dato < n) then
+				borrarElemento (a^.hd, n, ok)
+			else begin
+				OK:= TRUE;
+				if (a^.hi = nil) then begin
+					aux:= a;
+					a:= a^.hd;
+					dispose (aux);
+				end
+				else
+					if (a^.hd = nil) then begin
+						aux:= a;
+						a:= a^.hi;
+						dispose (aux);
+					end
+					else begin
+						a^.dato:= verMin (a^.hd);
+						borrarElemento (a^.hd, a^.dato, ok);
+					end;
+			end;
+	end;
+end;

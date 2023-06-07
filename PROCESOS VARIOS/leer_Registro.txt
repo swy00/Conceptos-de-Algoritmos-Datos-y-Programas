@@ -1,0 +1,15 @@
+procedure Leer_alumno(var r:alumno);
+begin
+	writeln('Ingrese cantidad de asistencias: ');
+	readln(r.cantA);
+	if (r.cantA <> -1) then begin
+		writeln('Ingrese numero de alumno: ');
+		readln(r.numA);
+		writeln('Ingrese nombre y apellido: ');
+		readln(r.ape_nom);
+		writeln('Ingrese dni: ');
+		readln(r.dni);
+		writeln('Ingrese nota final: ');
+		readln(r.notaF);
+     end;
+end;

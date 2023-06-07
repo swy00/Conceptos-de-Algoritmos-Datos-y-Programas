@@ -1,0 +1,15 @@
+procedure imprimirEnOrden (l: lista);
+begin
+     if (l <> nil) then begin
+        imprimirEnOrden (l^.sig);
+        writeln (l^.dato);
+       end;
+end;
+
+procedure imprimirEnOrdenInverso (l: lista);
+begin
+     if (l <> nil) then begin
+        writeln (l^.dato);
+        imprimirEnOrdenInverso (l^.sig);
+       end;
+end;

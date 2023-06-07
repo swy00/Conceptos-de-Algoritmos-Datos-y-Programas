@@ -1,0 +1,18 @@
+procedure busquedaDicotomica (v: vector; ini, fin: integer; num: integer; pos: integer);
+var
+	med: integer; 			//ini:=1; fin,pos:=dimL;
+begin
+	if (pos <> 0) then begin      
+		med:= (ini + fin) div 2;
+		if (num = v[med]) then
+			writeln('Lo encontre')
+		else
+			if (num < v[med]) then 
+				busquedadicotomica(v, ini, med-1, num, pos-1)
+            else
+              busquedadicotomica(v, med+1, fin, num, pos+1);
+    end
+    else
+      writeln('No lo encontre');
+end;
+

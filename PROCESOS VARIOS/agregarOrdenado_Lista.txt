@@ -1,0 +1,18 @@
+procedure insertar_ordenado (var l: listaA; r: alumno);
+var
+	ant, nue, act: listaA;
+begin
+	new (nue);
+	nue^.dato:= r;
+	act:= l;
+	ant:= l;
+	while (act <> nil) and (act^.dato.dni < r.dni) do begin
+		ant:= act;
+		act:= act^.sig;
+	end;
+	if (ant = act) then
+		l:= nue
+	else
+		ant^.sig:= nue;
+	nue^.sig:= act;
+end;

@@ -1,0 +1,12 @@
+procedure merge4(v: vector; var l2: lista);
+var
+   ult: lista;
+   numMin: integer;
+begin
+     l2:= NIL;  ult:=nil;
+     determinarMinimo (v, numMin);
+     while (numMin <> 999) do begin
+           agregarAlFinal (l2, ult, numMin);
+           determinarMinimo (v, numMin);
+      end;
+end;

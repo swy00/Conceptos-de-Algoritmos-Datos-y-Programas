@@ -1,0 +1,23 @@
+procedure mergeAcumulador (v:vector; var lt: listaT);
+var
+   montoT: integer;
+   act: integer;
+   gt: gastosT;
+   ult: listaT;
+   g:gastos;
+begin
+     lt:=nil;
+     ult:= nil;
+     determinarMinimo (v, g);
+     while (g.tipo <> 999) do begin
+           montoT:= 0;
+           act:=  g.tipo;
+           while (g.tipo <> 999) and (g.tipo = act) do begin
+                 montoT:= montoT + g.monto;
+                 determinarMinimo (v, g);
+           end;
+           gt.montoT:= montoT;
+           gt.tipo:= act;
+           agregarAtras (lt, ult, gt);
+     end;
+end;

@@ -1,0 +1,12 @@
+program cargar_vector(var v: vector; var dimL:integer);
+var
+	dato:integer;
+begin
+	dimL:= 0;
+	read(dato);
+	while (dato<>99) and (dimL<dimF) do begin
+		dimL:= dimL + 1;
+		v[dimL]:= dato;
+		read(dato);
+	end;
+end;
