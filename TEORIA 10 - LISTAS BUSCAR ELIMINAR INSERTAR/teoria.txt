@@ -295,3 +295,308 @@ Begin
           end;
 End;
 
+<---------------------------------------->
+BUSCAR en una LISTA
+
+Significa recorrer la lista desde el primer nodo buscando un valor que puede o no estar. 
+Se debe tener en cuenta si la lista está o no ordenada.
+
+LISTA DESORDENADA
+---> Se debe recorrer toda la lista (en el peor de los casos), y 
+detener la búsqueda en el momento que se encuentra el dato buscado o 
+en el que la lista se terminó.
+
+LISTA ordenada
+--->Se debe recorrer la lista teniendo en cuenta el orden. 
+La búsqueda se detiene cuando se termina la lista o el elemento buscado es 
+mayor al elemento actual.
+
+Cuando estoy recorriendo una lista y llego a NIL, significa que terminó y no encontró el elemento
+<---------------------------------------->
+<---------------------------------------->
+
+BUSQUEDA LISTA DESORDENADA
+
+Comienzo a recorrer la lista desde el nodo inicial.
+
+mientras ((no sea el final de la lista)y(no encuentre el elemento))
+
+   si (es el elemento buscado) entonces 
+      detengo la búsqueda
+   sino
+     avanzo al siguiente elemento
+
+Program uno;
+
+Type listaE= ^datosEnteros;
+     
+     datosEnteros= record
+                    elem:integer;
+                    sig:listaE;
+                   end;
+Var 
+  pri: listaE;
+  num:integer;  
+Begin
+  crear (pri);
+  cargar (pri); //se dispone
+  read (num);
+  if (buscar(pri,num)) then 
+    write (“el elemento existe”);
+End.
+<---------------------------------------->
+
+FUNCION DE BUSQUEDA LISTA DESORDENADA
+
+function buscar (pI: listaE; valor:integer):boolean;
+Var
+ aux:listaE; 
+ encontré:boolean;
+
+Begin
+  encontré:= false;
+  aux:= pI;
+  while ((aux <> nil) and (encontré = false)) do {Loopeo hasta llegar al final o se acabe la lista}
+   begin
+      if (aux^.elem = valor) then  
+        encontré:=true
+      else
+        aux:= aux^.sig;
+   end;
+   buscar:= encontré; 
+end;
+
+<---------------------------------------->
+<---------------------------------------->
+BUSQUEDA LISTA ordenada
+
+La diferencia es que no debo recorrer la lista hasta el final
+Si el valor es mas chico que el valor donde estoy parado no debo seguir
+
+function buscar (pI: listaE; valor:integer):boolean;
+Var
+ aux:listaE; 
+ encontré:boolean;
+
+Begin
+  encontré:= false;
+  aux:= pI;
+  while ((aux <> nil) and (aux^.elem < valor)) do
+   begin
+      aux:= aux^.sig;
+   end;
+   {Tengo que checkear si se salió del while por aux=nil, o si fue porque encontró el valor}
+   if (aux <> nil) and (aux^.elem = valor) then encontre:= true;
+  
+   buscar:= encontré; 
+end;
+<---------------------------------------->
+<---------------------------------------->
+ELIMINAR UN ELEMENTO 
+
+Implica recorrer la lista desde el comienzo pasando nodo a nodo hasta encontrar el elemento 
+y en ese momento eliminarlo (dispose). El elemento puede no estar en la lista.
+
+Si la lista está DESORDENADA seguramente la búsqueda se realizará hasta encontrar el 
+elemento o hasta que se termina la lista.
+
+Si la lista está ORDENADA seguramente la búsqueda se realizará hasta que se termina la 
+lista o no se encuentre un elemento mayor al buscado.
+
+Existen 3 casos:
+	CASO 1:que elemento a eliminar no se encuentre en la lista
+	CASO 2:que elemento a eliminar sea el primero de la lista
+	CASO 3:que elemento a eliminar no sea el primero en la lista     
+
+Caso 1:
+Recorrí toda la lista y el elemento a eliminar no se encuentra.
+OBSERVAR QUE actual QUEDÓ EN nil
+
+
+Caso 2:
+Empiezo a recorrer la lista.
+Mientras (no encuentro el elemento a borrar) y (no se termine la lista) 
+	el puntero anterior toma la dirección del puntero actual
+	avanzo el puntero actual
+Como (el elemento está) y (es el primer elemento)
+      actualizo el puntero inicial de la lista
+      elimino la dirección del puntero actual
+OBSERVAR QUE actual HABIA QUEDADO IGUAL A pri
+
+Caso 3:
+Empiezo a recorrer la lista.
+Mientras (no encuentro el elemento a borrar) y (no se termine la lista) 
+	el puntero anterior toma la dirección del puntero actual
+	avanzo el puntero actual
+Como (el elemento está) y (NO es el primer elemento)
+      actualizo el siguiente del puntero anterior con el siguiente de actual
+      elimino la dirección del puntero actual
+OBSERVAR QUE actual HABIA QUEDADO <> nil y de pri
+
+<---------------------------------------->
+ELIMINAR EN UNA LISTA DESORDENADA
+
+Comienzo a recorrer la lista desde el nodo inicial.
+
+mientras ((no sea el final de la lista)y(no encuentre el elemento))
+
+   el puntero anterior toma la dirección del puntero actual
+   avanzo el puntero actual
+
+si (encontré el elemento) entonces
+	si (es el primer nodo) entonces
+        actualizo el puntero inicial de la lista
+      sino
+	 actualizo el siguiente del puntero anterior con el siguiente de actual
+      
+      elimino la dirección del puntero actual
+
+<---------------------------------------->
+Program uno;
+
+Type listaE= ^datosEnteros;
+     
+     datosEnteros= record
+                    elem:integer;
+                    sig:listaE;
+                   end;
+Var 
+  pri: listaE;
+  num:integer;  
+Begin
+  crear (pri);
+  cargar (pri); //se dispone
+  read (num);
+  eliminar(pri,num);
+End.
+<---------------------------------------->
+<---------------------------------------->
+ELIMINAR LISTA DESORDENADA proceso, pero cortando al encontrar 1, deja afuera repeticiones
+
+procedure eliminar (Var pI: listaE; valor:integer);
+Var
+ actual,ant:listaE;
+
+Begin
+  actual:=pI; 
+  while (actual <> nil) and (actual^.elem <> valor) do begin
+    ant:=actual; 
+    actual:= actual^.sig;
+  end;
+  if (actual <> nil) then {si el elemento existe}
+    if (actual = pI) then {caso de que sea el primer nodo de la lista}
+      pI:= pI^.sig; 
+    else                  {caso de no ser 1er nodo,hago el puente con el siguiente a donde esta parado actual}
+     ant^.sig:= actual^.sig;
+    
+    dispose (actual);     {}
+End;
+<---------------------------------------->
+<---------------------------------------->
+ELIMINAR LISTA DESORDENADA proceso, teniendo en cuenta repeticiones
+procedure eliminar (Var pI: listaE; valor:integer);
+Var
+ actual,ant:listaE;
+
+Begin
+  actual:=pI; 
+  while (actual <> nil) do begin         {el while no frena hasta llegar al final}
+    if (actual^.elem <> valor) then begin
+     ant:=actual;  actual:= actual^.sig;
+    end;
+    else begin
+      if (actual = pI) then 
+        pI:= pI^.sig; 
+      else
+        ant^.sig:= actual^.sig;
+      dispose (actual);                 {si encuentro un valor, lo elimino}
+      actual:= ant;                     {le asigno nuevamente un valor a actual para poder seguir}
+    end;
+End;
+<---------------------------------------->
+<---------------------------------------->
+
+INSERTAR EN UNA LISTA UN ELEMENTO
+
+Implica agregar un nuevo nodo a una lista ordenada por algún criterio de manera que la lista siga quedando ordenada.
+Existen 4 casos:
+	  CASO 1: que la lista esté vacía.
+	  CASO 2: que elemento vaya al comienzo de la lista (es menor al 1er nodo de la lista)
+	  CASO 3: que elemento vaya al “medio” de la lista (es menor al último nodo de la lista)
+    CASO 4: que elemento vaya al final de la lista (es mayor al último nodo de la lista)
+
+CASO 1 ---> LISTA VACIA
+Generar un nuevo nodo (NUEVO).
+Asignar a la dirección del puntero inicial (PI) la del nuevo nodo (NUEVO)
+
+CASO 2 --->lista NO vacia, VA AL PRINCIPIO
+Generar un nuevo nodo (nuevo).Preparar punteros para el recorrido.
+Asignar a la dirección del puntero siguiente del nuevo la dirección del nodo inicial (PI).
+Actualizar con la dirección del nuevo nodo la dirección del puntero inicial (PI)
+OBSERVAR QUE actual HABIA QUEDADO = pri
+
+CASO 3 --->lista NO vacia, va al "medio"
+Generar un nuevo nodo (nuevo). Preparo los punteros para el recorrido
+Recorro hasta encontrar la posición
+Reasigno punteros, el siguiente de anterior es NUEVO y el siguiente de NUEVO es actual.
+OBSERVAR QUE actual HABIA QUEDADO <>  nil3
+
+CASO 4 --->lista NO vacia, va al final
+Generar un nuevo nodo (nuevo). Preparo los punteros para el recorrido
+Recorro hasta encontrar la posición
+Reasigno punteros, el siguiente de anterior es NUEVO y el siguiente de NUEVO es nil.
+OBSERVAR QUE actual HABIA QUEDADO =  nil
+
+<---------------------------------------->
+LISTA VACIA           ---> pri=nil
+ELEMENTO AL PRINCIPIO ---> actual=pri
+ELEMENTO AL MEDIO     ---> actual <> nil
+ELEMENTO AL FINAl     ---> actual = nil
+
+Program uno;
+
+Type listaE= ^datosEnteros;
+     
+     datosEnteros= record
+                    elem:integer;
+                    sig:listaE;
+                   end;
+Var 
+  pri: listaE;
+  num:integer;  
+Begin
+  crear (pri);
+  cargar (pri); //se dispone
+  read (num);
+  insertar(pri,num);
+End.
+<---------------------------------------->
+<---------------------------------------->
+INSERTAR ELEMENTO proceso
+
+procedure insertar (Var pI: listaE; valor:integer);
+Var
+ actual,anterior,nuevo:listaE;
+Begin
+  new (nuevo); nuevo^.elem:= valor; nuevo^.sig:=nil;
+  if (pI = nil) then     pI:= nuevo
+  
+  else begin
+    actual:= pI; ant:=pI;
+    while (actual <> nil) and (actual^.elem < nuevo^.elem) do   
+     begin
+      anterior:=actual;
+      actual:= actual^.sig;
+     end;
+  end;
+  if (actual = pI) then 
+  begin
+   nuevo^.sig:= pI;   pI:= nuevo;
+   end;
+  else
+  begin
+    anterior^.sig:= nuevo;   nuevo^.sig:= actual;
+    end;
+End;
+<---------------------------------------->
+<---------------------------------------->
