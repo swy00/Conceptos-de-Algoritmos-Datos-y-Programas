@@ -1,0 +1,128 @@
+//El Observatorio Astronómico de La Plata ha realizado un relevamiento sobre los distintos objetos astronómicos observados 
+//durante el año 2015. Los objetos se clasifican en 7 categorías: 1: estrellas, 2: planetas, 3: satélites, 4: galaxias, 
+//5: asteroides, 6: cometas y 7: nebulosas.
+//Al observar un objeto, se registran los siguientes datos: código del objeto, categoría del objeto (1..7), 
+//nombre del objeto, distancia a la tierra (medida en años luz), nombre del descubridor y año de su descubrimiento.
+//A. Desarrolle un programa que lea y almacene la información de los objetos que han sido observados. 
+//Dicha información se lee hasta encontrar un objeto con código -1 (el cual no debe procesarse). La estructura generada 
+//debe mantener el orden en que fueron leídos los datos.
+program OALP;
+Type
+	vector_cat= array [1..7] of integer;
+	objetos= record
+		cod_obj: integer;
+		cat_obj: 1..7;
+		nom_obj: string;
+		dist_tierra: real;
+		descubridor: string;
+		ano_desc: integer;
+	end;
+	lista= ^nodo;
+	nodo= record
+		dato: objetos;
+		sig: lista;
+	end;
+procedure leerobj (var o: objetos);
+begin
+	write('cod_obj: '); readln(o.cod_obj);
+	write('cat_obj: '); readln(o.cat_obj);
+	write('nom_obj: '); readln(o.nom_obj);
+	write('dist_tierra: '); readln(o.dist_tierra);
+	write('descubridor: '); readln(o.descubridor);
+	write('ano_desc: '); readln(o.ano_desc);
+	write('----')
+end;
+procedure agregarAtras (var l: lista; o: objetos);
+var
+    nuevo, actual, ant: lista;
+Begin
+    new(nuevo);
+    nuevo^.sig:= nil;
+    nuevo^.dato:=o;
+    if (l = nil) then 
+        l:= nuevo
+    else begin
+        actual:= L;
+        ant:= L;
+        while (actual <> nil) do  begin
+            ant:= actual;
+            actual:= actual^.sig;
+        end;
+    ant^.sig:= nuevo;
+    end;
+end;
+procedure armarLista (var l:lista);
+var
+	o: objetos;
+begin
+	while (o.cod_obj <> -1) do begin
+		leerobj(o);
+		agregarAtras(l, o);
+	end;
+	writeln('La lista fue cargada.');
+end;
+//B. Una vez leída y almacenada toda la información, se pide calcular e informar:
+//I. Los códigos de los dos objetos más lejanos de la tierra que se hayan observado.
+//II. La cantidad de planetas descubiertos por "Galileo Galilei" antes del año 1600.
+//III. La cantidad de objetos observados por cada categoría.
+//IV. Los nombres de las estrellas cuyos códigos de objeto poseen más dígitos pares que impares.
+procedure inicializarVectorCont (var v: vector_cat);
+var
+	i:integer;
+begin
+	for i:= 1 to 7 do
+		v[i]:= 0;
+end;
+procedure procesarLista (l: lista; var v:vector_cat);
+var
+	codS, codP, cantGG, i, par, impar: integer;
+	distS, distP: real;
+	aux: lista;
+begin
+	new(aux);
+	aux:= l;
+	distP:= -1;
+	distS:= distP;
+	cantGG:= 0; 
+	while (aux <> nil) do begin
+		if (aux^.dato.dist_tierra > distP)then begin           // INCISO I
+			distP:= aux^.dato.dist_tierra;
+			codP:= aux^.dato.cod_obj;
+		end
+		else
+			if (aux^.dato.dist_tierra >= distS)then begin
+				distS:= aux^.dato.dist_tierra;
+				codS:= aux^.dato.cod_obj;
+				end;
+		if (aux^.dato.descubridor = 'Galileo Galilei') AND (aux^.dato.ano_desc < 1600)then		// INCISO II
+			cantGG:= cantGG + 1;
+		v[aux^.dato.cat_obj]:= v[aux^.dato.cat_obj] + 1; 								// INCISO III
+		par:= 0;
+		impar:= 0;
+		if (aux^.dato.cat_obj = 1)then begin	// SI ES ESTRELLA              INCISO 4
+			while (aux^.dato.cod_obj = 0) do begin
+				if (aux^.dato.cod_obj MOD 2 = 0) then
+					par:= par + 1
+				else
+					impar:= impar + 1;
+				aux^.dato.cod_obj:= aux^.dato.cod_obj DIV 10
+			end;
+			if (par > impar) then
+				writeln('La estrella ',aux^.dato.nom_obj,' tiene mas digitos pares que impares')
+		end;
+		aux:= aux^.sig;
+	end;
+	writeln('El planeta mas alejado de la Tierra es ',codP,' seguido por ',codS);
+	writeln('Antes del 1600 Galileo descubrio ',cantGG,' objetos');
+	for i:= 1 to 7 do
+		writeln('La categoria ',i,' observo', v[i],' objetos');
+end;
+var
+	pri: lista;
+	vector: vector_cat;
+Begin
+	pri:= nil;
+	armarLista(pri);										// HASTA ACA PARTE A HECHA
+	inicializarVectorCont(vector);
+	procesarLista(pri, vector);
+End.

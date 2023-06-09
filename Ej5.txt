@@ -1,0 +1,120 @@
+//Una empresa de transporte de cargas dispone de la información de su flota compuesta por 100
+//camiones. De cada camión se tiene: patente, año de fabricación y capacidad (peso máximo en
+//toneladas que puede transportar).
+//Realizar un programa que lea y almacene la información de los viajes realizados por la empresa.
+//De cada viaje se lee: código de viaje, código del camión que lo realizó (1..100), distancia en
+//kilómetros recorrida, ciudad de destino, año en que se realizó el viaje y DNI del chofer. La lectura
+//finaliza cuando se lee el código de viaje -1.
+program Transporte;
+Type
+	camion = record
+		patente: integer;
+		anoFabricado: integer;
+		capacidad: real;
+	end;
+vector_camiones = array [1..100] of camion;
+	viajes = record
+		cod_viaje: integer;
+		cod_camion: 1..100;
+		dist_recorrida: integer;
+		destino: string;
+		ano_viaje: integer;
+		dni: integer; 
+	end;
+	lista= ^nodo;
+	nodo = record
+		dato: viajes;
+		sig: lista;
+	end;
+procedure leerViaje (var v: viajes);
+begin
+	write('cod viaje: '); readln(v.cod_viaje);
+	write('cod camion: '); readln(v.cod_camion);
+	write('dist recorrida: '); readln(v.dist_recorrida);
+	write('destino: '); readln(v.destino);
+	write('ano viaje: '); readln(v.ano_viaje);
+	write('dni: '); readln(v.dni);
+	writeln('----');
+end;
+procedure agregarAdelante (var l:lista; v: viajes);
+var
+	aux:lista;
+begin
+	new(aux);
+	aux^.dato:= v;
+	aux^.sig:= l;
+	l:= aux;
+end;
+procedure armarLista (var l:lista);
+var
+	v:viajes;
+begin
+	while (v.cod_viaje <> -1) do begin
+		leerViaje(v);
+		agregarAdelante(l, v)
+	end;
+end;
+//1. Informar la patente del camión que más kilómetros recorridos posee y la patente del camión
+//que menos kilómetros recorridos posee.
+//2. Informar la cantidad de viajes que se han realizado en camiones con capacidad mayor a 30,5
+//toneladas y que posean una antigüedad mayor a 5 años al momento de realizar el viaje (año
+//en que se realizó el viaje).
+//3. Informar los códigos de los viajes realizados por choferes cuyo DNI tenga sólo dígitos
+//impares
+procedure cargarVector (var v: vector_camiones);
+var
+	i: integer;
+begin
+	for i:= 1 to 100 do
+		v[i].patente:= i;
+		v[i].anoFabricado:= i + i;
+		v[i].capacidad:= i + 1;
+end;
+procedure recorrerListas (l: lista; v: vector_camiones);
+var
+	kmR, kmMay, kmMen: real;
+	patMay, patMen, i, cantviajes, digpar: integer;
+	aux:lista;
+begin
+	new(aux);
+	aux:= l;
+	kmMay:= -1;
+	kmMen:= 99999;
+	i:= 1;
+	cantviajes:= 0;
+	while (aux <> nil) do begin
+		kmR:= aux^.dato.dist_recorrida;
+		if (kmR > kmMay)then begin
+			kmMay:= kmR;
+			patMay:= v[i].patente;
+		end;
+		if (kmR < kmMen)then begin
+			kmMen:= kmR;
+			patMen:= v[i].patente;							// INCISO 1 HECHO
+		end;
+		if (v[i].capacidad >= 30.5) AND (aux^.dato.ano_viaje - v[i].anoFabricado >= 5)then			//INCISO 2 HECHO
+			cantviajes:= 1;
+		digpar:= 0;
+		while (digpar <> 1) and (aux^.dato.dni <> 0) do begin			//INCISO 3
+			if (aux^.dato.dni mod 2 = 0)then
+				digpar:= digpar + 1;
+			 aux^.dato.dni:=  aux^.dato.dni DIV 10;
+		end;
+		if (digpar <> 0)then begin
+			writeln(aux^.dato.cod_viaje,' tiene DNI con digitos impares.')
+		end;
+		i:= i + 1;
+		aux:= aux^.sig;
+	end;
+	writeln('La patente del camion que mas recorrido hizo es: ',patMay);
+	writeln('La patente del camion que menos recorrido hizo es: ',patMen);
+end;
+var
+	pri: lista;
+	tabla: vector_camiones;
+Begin
+	pri:= nil;
+	armarLista(pri);
+	cargarVector(tabla);
+	recorrerListas(pri, tabla);
+End.

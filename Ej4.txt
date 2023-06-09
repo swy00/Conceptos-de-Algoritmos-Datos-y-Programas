@@ -1,0 +1,84 @@
+//Una maternidad dispone información sobre sus pacientes. De cada una se conoce: nombre,
+//apellido y peso registrado el primer día de cada semana de embarazo (a lo sumo 42). La
+//maternidad necesita un programa que analice esta información, determine e informe:
+//a. Para cada embarazada, la semana con mayor aumento de peso.
+//b. El aumento de peso total de cada embarazada durante el embarazo.
+program maternidad;
+const
+dimF = 42;
+Type
+	vector_Peso = array [1..dimF] of real;
+	pacientes = record
+		nombre: string;
+		apellido: string;
+		semanas: 1..dimF;
+		peso: vector_Peso;
+	end;
+	lista = ^nodo;
+	nodo = record
+		dato: pacientes;
+		sig: lista;
+	end;
+procedure leerInfo (var p: pacientes);
+var
+	i: integer;
+begin
+	write('Nombre: '); readln(p.nombre);
+	write('Apellido: '); readln(p.apellido);
+	write('Semanas: '); readln(p.semanas);
+	for i:= 1 to p.semanas do begin
+		write('Peso semanas: ',i,': '); readln(p.peso[i]);
+	end;
+end;
+procedure agregar_adelante (var l:lista; p: pacientes);
+var
+	aux: lista;
+begin
+	new(aux);
+	aux^.dato:= p;
+	aux^.sig:= l;
+	l:= aux;
+end;
+procedure cargar_lista (var l:lista);
+var
+i:integer;
+	p:pacientes;
+begin
+	for i:= 1 to 3 do begin
+		leerInfo(p);
+		agregar_adelante (l, p)
+	end;
+end;
+procedure recorrer_lista (l: lista);
+var
+i, SMayA: integer;
+AuPT, aumento, AuMax, pesoAct, pesoAnt: real;
+begin
+	while (l <> nil) do begin
+		i:= 1;
+		pesoAnt:= 0;
+		writeln('hola');
+		AuPT:= 0;
+		while (i <= l^.dato.semanas) do begin
+			pesoAct:= l^.dato.peso[i];
+			aumento:= pesoAct - pesoAnt;
+			if (aumento > AuMax) then begin
+				AuMax:= aumento;
+				SMayA:= i;
+			end;
+		pesoAnt:= l^.dato.peso[i];
+		i:= i + 1;
+		end;
+		AuPT:=  l^.dato.peso[l^.dato.semanas] - l^.dato.peso[1];
+		writeln('La semana con mas aumento fue ',SmayA);
+		writeln('El aumento de peso total fue de ',AuPT:2:2);
+		l:= l^.sig;
+	end;
+end;
+var
+	pri: lista;
+Begin
+	pri:= nil;
+	cargar_lista(pri);
+	recorrer_lista(pri);
+End.

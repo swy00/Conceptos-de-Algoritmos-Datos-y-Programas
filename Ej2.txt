@@ -1,0 +1,137 @@
+//Implementar un programa que lea y almacene información de clientes de una empresa
+//aseguradora automotriz. De cada cliente se lee: código de cliente, DNI, apellido, nombre, código
+//de póliza contratada (1..6) y monto básico que abona mensualmente. La lectura finaliza cuando
+//llega el cliente con código 1122, el cual debe procesarse.
+//La empresa dispone de una tabla donde guarda un valor que representa un monto adicional que
+//el cliente debe abonar en la liquidación mensual de su seguro, de acuerdo al código de póliza que
+//tiene contratada.
+//Una vez finalizada la lectura de todos los clientes, se pide:
+program Ejercicio2;
+Type
+	vecTorbla = array [1..6] of integer;
+	clientes= record
+		codClie: integer;
+		dni: integer;
+		apellido: string;
+		nombre: string;
+		PolCont: 1..6;
+		montBasicoMens: real;
+	end;
+	lista = ^nodo;
+	nodo = record
+		dato: clientes;
+		sig: lista;
+	end;
+function dosNueve (dni: integer): boolean;
+var
+	dosN: integer;
+begin
+	dosN:= 0;
+	while (dni <> 0) do begin
+		if (dni MOD 10 = 9) then
+			dosN:= dosN + 1;
+		dni:= dni DIV 10;
+	end;
+	if (dosN >= 2) then
+		dosNueve:= True
+	else
+		dosNueve:= False;
+end;
+procedure cargar_tabla (var v: vecTorbla);
+var
+	i: integer;
+begin
+	for i:= 1 to 6 do 
+		v[i]:= i + 100;											// XDDDDD SE DISPONE
+end;
+procedure imprimir_lista (l: lista);
+begin
+	while (l <> nil) do begin
+		writeln ('Cod cli: ', l^.dato.codClie);
+		writeln ('Dni: ', l^.dato.dni);
+		writeln ('Apellido: ', l^.dato.apellido);
+		writeln ('Nombre: ', l^.dato.nombre);
+		writeln('Poliza cont: ',l^.dato.PolCont);
+		writeln('MBM: ', l^.dato.montBasicoMens);
+		writeln('---');
+		l:= l^.sig;
+	end;
+end;
+procedure ingresarClientes(var c: clientes);
+begin
+	write('Codigo cliente: '); readln(c.codClie);
+	write('Dni: '); readln(c.dni);
+	write('Apellido: '); readln(c.apellido);
+	write('Nombre: '); readln(c.nombre);
+	write('Poliza contratada: '); readln(c.PolCont);
+	write('Monto Basico Mensual: '); readln(c.montBasicoMens);
+end;	
+procedure agregar_adelante(var l: lista; c: clientes);
+var
+	aux:lista;
+begin
+	new(aux);
+	aux^.dato:= c;
+	aux^.sig:= l;
+	l:= aux;
+end;
+procedure cargar_lista(var l:lista);
+var
+	c:clientes;
+begin
+	repeat
+	ingresarClientes(c);
+	writeln('----');
+	agregar_adelante(l, c);
+	until (c.codClie = 1122);
+end;
+// Informar para cada cliente DNI, apellido, nombre y el monto completo que paga
+//mensualmente por su seguro automotriz (monto básico + monto adicional).
+procedure IncisoS(l:lista; v: vecTorbla);
+var 
+	seguroAutom: real;
+begin
+	while (l <> nil) do begin
+		seguroAutom:= (l^.dato.montBasicoMens + v[l^.dato.PolCont]);
+		writeln('El cliente con DNI ',l^.dato.dni,' de apellido: ',l^.dato.apellido,' nombre: ',l^.dato.nombre,' paga: ',seguroAutom:0:0);
+// Informar apellido y nombre de aquellos clientes cuyo DNI contiene al menos dos dígitos 9.
+		if dosNueve(l^.dato.dni) then
+			writeln('Su DNI tiene al menos dos nueves');
+		writeln('----');	
+		l:= l^.sig;
+	end;
+end;
+//Realizar un módulo que reciba un código de cliente, lo busque (seguro existe) y lo elimine de
+//la estructura
+procedure BuscarCodYEliminar(var l:lista; cod:integer);
+var
+	ant, act: lista;
+begin
+	act:= l;
+	while (act^.dato.codClie <> cod)do begin
+		ant:= act;
+		act:= act^.sig;
+	end;
+	if (act <> nil) then begin
+		if (act = l)then              // CASO QUE SEA EL PRIMER DNI DE LA LISTA
+			l:= act^.sig
+		else                             // CASO que este mas del otro lado
+			ant^.sig:= act^.sig;
+		dispose(act);
+		write('DNI encontrado y eliminado.');
+	end;
+end;
+var
+	codigo: integer;
+	pri: lista;
+	tabla: vecTorbla;
+Begin
+	cargar_tabla(tabla);
+	pri:= nil;
+	cargar_lista(pri);
+	IncisoS(pri, tabla);
+	write('Codigo a borrar: '); readln(codigo);
+	BuscarCodYEliminar(pri, codigo);
+	imprimir_lista(pri);
+End.
+
