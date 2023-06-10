@@ -139,7 +139,7 @@ begin
                 cantCompras:= cantCompras +1;
             end;
             L:=L^.sig;
-            actualizarMaximo(DNIActual,cantGastoActual,DNIMin,cantGastosMin);
+            actualizarMinimo(DNIActual,cantGastoActual,DNIMin,cantGastosMin);
         end;
     end;
 end;
