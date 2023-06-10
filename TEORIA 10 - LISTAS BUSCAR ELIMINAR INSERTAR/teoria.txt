@@ -502,7 +502,8 @@ Begin
   actual:=pI; 
   while (actual <> nil) do begin         {el while no frena hasta llegar al final}
     if (actual^.elem <> valor) then begin
-     ant:=actual;  actual:= actual^.sig;
+     ant:=actual;  
+     actual:= actual^.sig;
     end;
     else begin
       if (actual = pI) then 
@@ -578,25 +579,31 @@ procedure insertar (Var pI: listaE; valor:integer);
 Var
  actual,anterior,nuevo:listaE;
 Begin
-  new (nuevo); nuevo^.elem:= valor; nuevo^.sig:=nil;
-  if (pI = nil) then     pI:= nuevo
-  
-  else begin
-    actual:= pI; ant:=pI;
+  new (nuevo); 
+  nuevo^.elem:= valor; 
+  nuevo^.sig:=nil;
+  if (pI = nil) then     
+    pI:= nuevo
+  else 
+  begin
+    actual:= pI; 
+    ant:=pI;
     while (actual <> nil) and (actual^.elem < nuevo^.elem) do   
-     begin
+    begin
       anterior:=actual;
       actual:= actual^.sig;
-     end;
-  end;
-  if (actual = pI) then 
-  begin
-   nuevo^.sig:= pI;   pI:= nuevo;
-   end;
-  else
-  begin
-    anterior^.sig:= nuevo;   nuevo^.sig:= actual;
     end;
+  end;
+  if (actual = pI) then   {VA AL PRINCIPIO}
+  begin
+   nuevo^.sig:= pI;   
+   pI:= nuevo;
+   end;
+  else                    {SI VA EN EL MEDIO O AL FINAL}
+  begin
+    anterior^.sig:= nuevo;   
+    nuevo^.sig:= actual;
+  end;
 End;
 <---------------------------------------->
 <---------------------------------------->
