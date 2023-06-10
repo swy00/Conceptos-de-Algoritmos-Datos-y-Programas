@@ -12,7 +12,7 @@ Type
 		anoFabricado: integer;
 		capacidad: real;
 	end;
-vector_camiones = array [1..100] of camion;
+	vector_camiones = array [1..100] of camion;
 	viajes = record
 		cod_viaje: integer;
 		cod_camion: 1..100;
@@ -26,6 +26,7 @@ vector_camiones = array [1..100] of camion;
 		dato: viajes;
 		sig: lista;
 	end;
+
 procedure leerViaje (var v: viajes);
 begin
 	write('cod viaje: '); readln(v.cod_viaje);
@@ -45,6 +46,7 @@ begin
 	aux^.sig:= l;
 	l:= aux;
 end;
+
 procedure armarLista (var l:lista);
 var
 	v:viajes;
@@ -109,6 +111,11 @@ begin
 	writeln('La patente del camion que mas recorrido hizo es: ',patMay);
 	writeln('La patente del camion que menos recorrido hizo es: ',patMen);
 end;
+
+
+
+
+
 var
 	pri: lista;
 	tabla: vector_camiones;

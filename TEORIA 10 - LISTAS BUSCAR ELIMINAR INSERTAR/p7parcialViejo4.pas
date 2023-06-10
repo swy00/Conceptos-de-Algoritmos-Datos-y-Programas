@@ -137,8 +137,8 @@ begin
             if(tieneAlMenos3Pares(L^.dato.DNI)) then
             begin
                 cantCompras:= cantCompras +1;
-            L:=L^.sig;
             end;
+            L:=L^.sig;
             actualizarMaximo(DNIActual,cantGastoActual,DNIMin,cantGastosMin);
         end;
     end;
