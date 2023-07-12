@@ -26,8 +26,10 @@ begin
         ant := act;
         act:= act^.sig;
     end;
-    if (act = ant) then {al inicio o lista vacía}
-        L:= nue; 
+    if (act = ant) then
+    begin {al inicio o lista vacía}
+        L:= nue;
+    end 
     else                {al medio o al final}
         ant^.sig:= nue;
     nue^.sig:= act; 
